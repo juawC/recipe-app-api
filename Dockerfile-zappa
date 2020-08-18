@@ -1,0 +1,9 @@
+FROM lambci/lambda:build-python3.8
+
+RUN pip install -U pip-tools && \
+  pip install -U zappa
+RUN yum -y install mysql-devel
+
+RUN virtualenv /venv
+
+WORKDIR /var/task
