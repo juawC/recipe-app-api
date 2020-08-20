@@ -26,7 +26,7 @@ SECRET_KEY = 'f^kz51wmekqww94(awy(@g&a5nvk2#32ike7!v0x5@4!j#iur&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ '127.0.0.1', 'ui6d0uv9w7.execute-api.eu-west-2.amazonaws.com', ]
 
 
 # Application definition
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_s3_storage',
     'core',
     'user',
     'recipe',
@@ -127,10 +128,28 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_URL = '/media/'
-
-MEDIA_ROOT = '/vol/web/media'
-STATIC_ROOT = '/vol/web/static'
-
 AUTH_USER_MODEL = 'core.User'
+
+USE_AWS = os.environ.get('USE_AWS') == 'True'
+
+if USE_AWS:
+    S3_BUCKET = "api-recipe-test-9123123"
+
+    DEFAULT_FILE_STORAGE = "django_s3_storage.storage.S3Storage"
+    STATICFILES_STORAGE = "django_s3_storage.storage.StaticS3Storage"
+
+    AWS_S3_BUCKET_NAME = S3_BUCKET
+    AWS_S3_BUCKET_NAME_STATIC = S3_BUCKET
+
+    STATIC_URL = "https://%s.s3.amazonaws.com/" % S3_BUCKET + '/static/'
+    MEDIA_URL = '/media/'
+    MEDIA_ROOT = "https://%s.s3.amazonaws.com/" % S3_BUCKET + '/media/'
+
+    AWS_REGION = "eu-west-2"
+    AWS_ACCESS_KEY_ID = os.environ['AWS_ACCESS_KEY_ID']                             
+    AWS_SECRET_ACCESS_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+else: 
+    MEDIA_ROOT = '/vol/web/media'
+    STATIC_ROOT = '/vol/web/static'
+    STATIC_URL = '/static/'
+    STATIC_URL = '/media/'

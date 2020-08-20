@@ -3,7 +3,7 @@ MAINTAINER juawc
 
 ENV PYTHONUNBUFFERED 1
 
-COPY ./requirements.txt  /requirements.txt
+COPY ./app/requirements.txt  /requirements.txt
 RUN apk add --update --no-cache jpeg-dev mariadb-dev
 RUN apk add --update --no-cache --virtual .tmp-build-deps \
       gcc python3-dev musl-dev zlib zlib-dev

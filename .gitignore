@@ -130,3 +130,6 @@ dmypy.json
 
 # Cached
 cached_*
+
+# Env files
+*.env

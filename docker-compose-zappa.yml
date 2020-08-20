@@ -6,6 +6,8 @@ services:
       context: .
       dockerfile: Dockerfile-zappa
     volumes:
-      - .:/var/task
+      - ./app:/var/task/app
       - ~/.aws:/root/.aws
-    command: ["bash"]
+    env_file:
+      - aws.env
+    command: ["/bin/bash"]
