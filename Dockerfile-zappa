@@ -10,12 +10,8 @@ COPY ./app /var/task/app
 
 COPY ./aws.env /
 
-RUN export $(cat aws.env | xargs)
-
 RUN source /venv/bin/activate && \
     pip install -r /var/task/app/requirements.txt && \
     deactivate
 
 WORKDIR /var/task/app
-
-RUN envsubst < zappa_settings.json.tpl > zappa_settings.json
